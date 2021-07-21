@@ -1,0 +1,159 @@
+*,*:before,*:after{box-sizing:border-box}html,body,div,span,object,iframe,figure,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,code,em,img,small,strike,strong,sub,sup,tt,b,u,i,ol,ul,li,fieldset,form,label,table,caption,tbody,tfoot,thead,tr,th,td,main,canvas,embed,footer,header,nav,section,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}footer,header,nav,section,main{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:"";content:none}table{border-collapse:collapse;border-spacing:0}input{-webkit-appearance:none;border-radius:0}
+
+$color1: #000;
+$color2: #fff;
+$color3: #191919;
+
+* {
+ color: $color2; 
+ //  outline: 0.1em dashed red;
+}
+
+html, body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: #323232;
+  font-size: 1rem;
+}
+
+.abs-cntr {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#app {
+  height: 700px;
+  width: 400px;
+  margin: auto;
+  padding: 0 15px;
+  // overflow: none;
+  border: 5px solid $color3;
+}
+
+nav {
+  // background-color: $color1;
+  position: relative;
+  height: 30px;
+  margin-bottom: 10px;
+  line-height: 30px;
+
+  .nav--btn {
+    display: inline-block;
+    height: 100%;
+    width: 10%;
+    text-align: center;
+  }
+
+  #menu-btn {
+    
+  }
+
+  & p {
+    display: inline-block;
+    width: 80%;
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  #theme-btn {
+    
+  }
+}
+
+#display {
+  position: relative;
+  height: 20%;
+  width: 100%;
+  border: 1px solid $color1;
+  border-radius: 5px;
+
+  margin: 20px 0;
+
+  & .abs-cntr {
+    width: 90%;
+    overflow: none;
+
+    p {
+      text-align: right;
+    }
+  }
+
+  &--eval {
+    font-size: 4em;
+  }
+
+  &--equation {
+    font-size: 1.1em;
+  }
+}
+
+.special-btns {
+  margin-left: 60%;
+  height: 5%;
+  width: 40%;
+  margin-bottom: 20px;
+
+  &--btn {
+    display: inline-block;
+    height: 100%;
+    width: 40%;
+    margin-left: 10%;
+    outline: 1px dashed blue;
+    text-align: center;
+    line-height: 2em;
+  }
+}
+
+#calulator-btns {
+  outline: 1px dashed blue;
+  padding: 15px;
+  position: relative;
+  height: 60%;
+  display: grid;
+  grid-template-columns: repeat(22.5, 4);
+  grid-template-rows: repeat(18, 5);
+  grid-template-areas: 
+    "functions functions functions operators"
+    "numbers numbers numbers operators"
+    "numbers numbers numbers operators"
+    "numbers numbers numbers operators"
+    "numbers numbers numbers operators";
+  gap: 3.33%;
+
+  #functions {
+    outline: 1px dashed green;
+    grid-area: functions;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3.33%;
+  }
+
+  #numbers {
+    outline: 1px dashed green;
+    grid-area: numbers;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 3.33%;
+
+    #zero {
+      grid-column: 1 / span 2;
+    }
+  }
+
+  #operators {
+    outline: 1px dashed green;
+    grid-area: operators;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    gap: 3.33%;
+  }
+
+  .btn {
+    outline: 1px dashed purple;
+  }
+}
