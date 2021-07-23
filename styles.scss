@@ -28,7 +28,7 @@ html, body {
   position: relative;
   height: 100%;
   width: 100%;
-  background-color: #323232;
+  background-color: $secondary-color;
   font-family: 'Roboto Mono', monospace;
   font-size: 1rem;
   color: $text-color; 
@@ -41,12 +41,54 @@ html, body {
   transform: translate(-50%, -50%);
 }
 
+.i {
+  height: 70%;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.2em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+
+  &-history {
+    content: url("./icons/history_white_24dp.svg");
+  }
+
+  &-backspace {
+    content: url("./icons/backspace_white_24dp.svg");
+  }
+
+  &-menu {
+    content: url("./icons/menu_white_24dp.svg");
+  }
+
+  &-menu-open {
+    content: url("./icons/menu_open_white_24dp.svg");
+  }
+
+  &-day {
+    content: url("./icons/wb_sunny_white_24dp.svg");
+  }
+
+  &-night {
+    content: url("./icons/nightlight_white_24dp.svg");
+  }
+
+}
+
 #app {
   height: 700px;
   width: 400px;
   margin: auto;
-  padding: 0 15px;
+  padding: 15px;
+  border: 8px solid darken($bg-color, 5%);
+  border-radius: 20px;
   background-color: $bg-color;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 nav {
@@ -84,12 +126,15 @@ nav {
   height: 20%;
   width: 100%;
   border-radius: 5px;
-  background-color: $fg-color;
-  background-color: lighten(#606F49, 1%);
-  background-color: #3B3B3B;
-
   box-shadow: inset  0px 0px 15px rgba(0,0,0,0.6);
   margin: 20px 0;
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(0.2) rotate(180)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(4, 90%, 58%, 0)'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='hsla(0, 0%, 0%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-140,-15)' fill='url(%23a)'/></svg>");
+  text-shadow: inset -1px 2px 1px rgba(0,0,0,.1), -1px 2px 1px rgba(0,0,0,.1);
+
+  // background-color: lighten(#606F49, 10%);
+  // color: rgba(darken($text-color, 70%), 0.8);
+  background-color: #3B3B3B;
+  color: rgba(darken($text-color, 10%), 0.7);
 
   & .abs-cntr {
     width: 90%;
@@ -121,6 +166,7 @@ nav {
     z-index: 2;
     pointer-events: none;
     animation: flicker 0.15s infinite;
+    // animation: flicker 5s infinite;
   }
 
   @keyframes flicker {
@@ -139,6 +185,9 @@ nav {
     20% {
     opacity: 0.18128;
     }
+    24% {
+    opacity: 0.18128;
+    }
     25% {
     opacity: 0.83891;
     }
@@ -151,7 +200,10 @@ nav {
     40% {
     opacity: 0.26559;
     }
-    45% {
+    41% {
+    opacity: 0.84693;
+    }
+    49% {
     opacity: 0.84693;
     }
     50% {
@@ -169,7 +221,10 @@ nav {
     70% {
     opacity: 0.53455;
     }
-    75% {
+    71% {
+    opacity: 0.37288;
+    }
+    79% {
     opacity: 0.37288;
     }
     80% {
@@ -181,8 +236,11 @@ nav {
     90% {
     opacity: 0.7003;
     }
-    95% {
+    91% {
     opacity: 0.36108;
+    }
+    92% {
+    opacity: 0.24387;
     }
     100% {
     opacity: 0.24387;
@@ -190,9 +248,33 @@ nav {
   }
 }
 
+.btn {
+  @include vertical-align;
+  text-align: center;
+  background-color: $primary-color;
+  cursor: pointer;
+  font-size: 1.6em;
+  border: 10px solid darken($primary-color, 5%);
+  border-radius: 5px;
+  transition: all ease-in-out 0.1s;
+  // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 6px;
+  
+  &:hover {
+    border-width: 7px;
+  }
+
+  &:active {
+    cursor: grabbing;
+    margin-top: 2px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+  }
+}
+
 .special-btns {
   margin-left: 60%;
-  height: 5%;
+  height: 6%;
   width: 40%;
   margin-bottom: 20px;
 
@@ -201,15 +283,12 @@ nav {
     height: 100%;
     width: 40%;
     margin-left: 10%;
-    text-align: center;
+    border: 7px solid darken($primary-color, 5%);
+    font-size: 1.2em;
 
-    @include vertical-align;
-    text-align: center;
-    background-color: $primary-color;
-    cursor: pointer;
-    font-size: 1.6em;
-    border: 5px solid darken($primary-color, 5%);
-    border-radius: 5px;
+    &:hover {
+      border-width: 4px;
+    }
   }
 }
 
@@ -232,22 +311,26 @@ nav {
   #clear {
     background-color: $secondary-color;
     border: 10px solid darken($secondary-color, 10%);
+
+    &:hover {
+      border-width: 7px;
+    }
+
+    &:active {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(4, 2, 83) 0px 0px 0px 3px;
+  }
   }
 
   #equal {
     background-color: $secondary-color;
     border: 10px solid darken($secondary-color, 10%);
+
+    &:hover {
+      border-width: 7px;
+    }
   }
 
-  .btn {
-    @include vertical-align;
-    text-align: center;
-    background-color: $primary-color;
-    cursor: pointer;
-    font-size: 1.6em;
-    border: 10px solid darken($primary-color, 5%);
-    border-radius: 5px;
-
+  & .btn {
     &--function {
       
     }
@@ -255,10 +338,28 @@ nav {
     &--number {
       background-color: darken($primary-color, 5%);
       border: 10px solid darken($primary-color, 10%);
+
+      &:hover {
+        border-width: 7px;
+      }
     }
 
     &--operator {
 
     }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #app {
+    height: 98%;
+    width: 98%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  #app {
+    height: 85%;
+    width: 70%;
   }
 }
