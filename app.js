@@ -16,6 +16,7 @@ let appEl,
 // -- Other
 let currUserVal = '';
 let currUserOperator = '';
+let lastClicked = '';
 let calcs = [];
 
 //#endregion Variables
@@ -52,6 +53,17 @@ let UpdateEquation = () => {
   equateStr += ` ${GetOperatorSymbol(currUserOperator)} ${currUserVal}`;
   dispEquateEl.innerHTML = equateStr;
 }
+
+let AddCalculation = (calc, lastOp) => {
+  calcs.push({ ...calc });
+}
+
+let EditCalculation = (index, edits) => {
+  calcs[index] = {
+    ...calcs[index],
+    ...edits
+  }
+}
 //#endregion App Functions
 
 //#region Handler Function
@@ -69,57 +81,80 @@ let SetUpListeners = () => {
 }
 
 let HandleNumClick = function () {
-  let tempVal;
+  currUserVal = currUserVal.toString();
+
+  // Check & set up decimal
   if (this.dataset.number === '.') {
-    currUserVal += '.'; // Check if already has decimal
-    tempVal = Str2Float(currUserVal);
-  } 
-  else {
+    if(IsFloat(currUserVal)) return;
+
+    return (currUserVal += '.');
+  } else {
     currUserVal += this.dataset.number;
-    tempVal = Str2Num(currUserVal);
+    currUserVal = Str2Float(currUserVal);
   }
 
+  // If no calcs, just update display
   if (calcs.length <= 0) {
-    UpdateDisplay(tempVal);
+    UpdateDisplay(currUserVal);
   } else {
-    UpdateDisplay(operate(currUserOperator, calcs[calcs.length - 1].result, tempVal));
+    // If one calc, update first calc real time
+    // if(calcs.length === 1) {
+    //   EditCalculation(0, { result: operate(calcs[0].operator, calcs[0].num2, currUserVal)}); // Edit/Fix/Correct the first calc
+    // }
+
+    // let latestCalcIndex = (calcs.length - 1);
+    // EditCalculation(latestCalcIndex, { num2: currUserVal });
+    UpdateDisplay(operate(currUserOperator, calcs[calcs.length-1].result, currUserVal));
   }
+
+  lastClicked = 'number';
+  console.clear();
+  console.table(calcs);
 }
 
 let HandleOperatorClick = function () {
-  // if (currUserOperator === this.dataset.operator) return;
-
-  if (currUserOperator === 'add' && this.dataset.operator === 'subtract') {
-    // Next number is negative
-    // If Next number is already negative, invert
-
-    // make a function for this, InvertInt()
-  } else {
+  // If the user clicks an operator again, simply update
+  if (lastClicked !== 'operator') {
+    currUserVal = IsFloat(currUserVal) ? Str2Float(currUserVal) : Str2Num(currUserVal);
+    // Fisrt calc, set up
+    if (calcs.length === 0) {
+      AddCalculation({
+        num1: 0,
+        num2: currUserVal,
+        operator: this.dataset.operator, // currUserOperator will be overwritten add end of function
+        result: operate('', currUserVal)
+      });
+    } else {
+      AddCalculation({
+        num1: calcs[calcs.length - 1].result,
+        num2: currUserVal,
+        operator: currUserOperator, // currUserOperator will be overwritten add end of function
+        result: operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal)
+      });
+    }
+    
+    currUserVal = '';
+    lastClicked = 'operator';
     currUserOperator = this.dataset.operator;
+  } else if (lastClicked === 'operator') { // lastClicked is an operator
+    // Auto Invert value 
+    if (currUserOperator === 'add' &&
+      this.dataset.operator === 'subtract') {
+      if (currUserVal === '-') 
+        currUserOperator = this.dataset.operator;
+
+      currUserVal = ToggleNegative(currUserVal);
+    }
+    else if (currUserOperator === 'subtract' &&
+      this.dataset.operator === 'subtract') {
+        currUserVal = ToggleNegative(currUserVal);
+    } else {
+      currUserOperator = this.dataset.operator;
+    }
   }
 
-  currUserVal = IsFloat(currUserVal) ? Str2Float(currUserVal) : Str2Num(currUserVal);
-  // Check if array is empty
-  if (calcs.length <= 0) {
-    calcs.push({
-      num1: 0,
-      num2: currUserVal,
-      operator: currUserOperator,
-      result: currUserVal
-    });
-  } else {
-    let prevRes = calcs[calcs.length - 1].result;
-
-    calcs.push({
-      num1: prevRes,
-      num2: currUserVal,
-      operator: currUserOperator,
-      result: operate(currUserOperator, prevRes, currUserVal)
-    });
-  }
-
-  currUserVal = '';
-  // currUserOperator = '';
+  console.clear();
+  console.table(calcs);
 }
 //#endregion Handler Functions
 
@@ -132,13 +167,26 @@ let IsFloat = (n) => {
   return n > Math.floor(n);
 }
 
+let InvertVal = (n) => {
+  if(n < 0)
+    return Math.abs(n);
+
+  return -Math.abs(n);
+}
+
+let ToggleNegative = (val) => {
+  if(val === '-')
+    return '';
+  return '-';
+}
+
 let Str2Num = (str) => {
   let newNum = parseInt(str, 10);
   return !isNaN(newNum) ? newNum : console.error('ERROR, must be a valid number');
 }
 
 let Str2Float = (str) => {
-  let newNum = parseFloat(str, 10);
+  let newNum = parseFloat(str);
   return !isNaN(newNum) ? newNum : console.error('ERROR, must be a valid float');
 }
 
