@@ -140,15 +140,20 @@ nav p {
 }
 #display .abs-cntr {
   width: 90%;
-  overflow: none;
+  overflow: hidden;
 }
 #display .abs-cntr p {
   text-align: right;
 }
 #display--eval {
   font-size: 4em;
+  overflow: none;
 }
 #display--equation {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline;
+  float: right;
   font-size: 1.1em;
 }
 #display::after {

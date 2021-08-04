@@ -64,12 +64,20 @@ let EditCalculation = (index, edits) => {
     ...edits
   }
 }
+
+let Reset = () => {
+  currUserVal = '';
+  currUserOperator = '';
+  lastClicked = '';
+  calcs = [];
+}
 //#endregion App Functions
 
 //#region Handler Function
 let SetUpListeners = () => {
   let numEl = document.querySelectorAll('.btn--number');
   let operatorEl = document.querySelectorAll('.btn--operator');
+  let functionEl = document.querySelectorAll('.btn--function');
 
   numEl.forEach(e => {
     e.addEventListener('click', HandleNumClick);
@@ -78,10 +86,14 @@ let SetUpListeners = () => {
   operatorEl.forEach(e => {
     e.addEventListener('click', HandleOperatorClick);
   });
+
+  functionEl.forEach(e => {
+    e.addEventListener('click', HandleFunctionClick);
+  });
 }
 
 let HandleNumClick = function () {
-  currUserVal = currUserVal.toString();
+  currUserVal = (calcs.length <= 0) && (currUserOperator === 'equal') ? '' : currUserVal.toString();
 
   // Check & set up decimal
   if (this.dataset.number === '.') {
@@ -93,17 +105,10 @@ let HandleNumClick = function () {
     currUserVal = Str2Float(currUserVal);
   }
 
-  // If no calcs, just update display
+  // If no calcs, just update display with the same value
   if (calcs.length <= 0) {
     UpdateDisplay(currUserVal);
   } else {
-    // If one calc, update first calc real time
-    // if(calcs.length === 1) {
-    //   EditCalculation(0, { result: operate(calcs[0].operator, calcs[0].num2, currUserVal)}); // Edit/Fix/Correct the first calc
-    // }
-
-    // let latestCalcIndex = (calcs.length - 1);
-    // EditCalculation(latestCalcIndex, { num2: currUserVal });
     UpdateDisplay(operate(currUserOperator, calcs[calcs.length-1].result, currUserVal));
   }
 
@@ -113,9 +118,16 @@ let HandleNumClick = function () {
 }
 
 let HandleOperatorClick = function () {
-  // If the user clicks an operator again, simply update
-  if (lastClicked !== 'operator') {
+  if (this.dataset.operator === 'equal') {
+    let tempResult = operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal);
+
+    Reset();
+    currUserVal = tempResult;
+    currUserOperator = this.dataset.operator;
+    UpdateDisplay(currUserVal);
+  } else if (lastClicked !== 'operator') { // If the user last clicked a number
     currUserVal = IsFloat(currUserVal) ? Str2Float(currUserVal) : Str2Num(currUserVal);
+
     // Fisrt calc, set up
     if (calcs.length === 0) {
       AddCalculation({
@@ -150,11 +162,28 @@ let HandleOperatorClick = function () {
         currUserVal = ToggleNegative(currUserVal);
     } else {
       currUserOperator = this.dataset.operator;
+      currUserVal = '';
     }
   }
 
+  UpdateEquation();
   console.clear();
   console.table(calcs);
+}
+
+let HandleFunctionClick = function () {
+  switch(this.dataset.function) {
+    case 'clear':
+      AllClear();
+      break;
+    case 'integer':
+      currUserVal = InvertNumber(currUserVal);
+      UpdateDisplay(currUserVal);
+      break;
+    case 'percent':
+      currUserVal = Convert2Percent(currUserVal);
+      break;
+  }
 }
 //#endregion Handler Functions
 
@@ -174,10 +203,23 @@ let InvertVal = (n) => {
   return -Math.abs(n);
 }
 
+// Must take in whole value and find - 
 let ToggleNegative = (val) => {
   if(val === '-')
     return '';
   return '-';
+}
+
+let InvertNumber = (num) => {
+  // Check if number
+  num = (typeof num === 'number') ? num : num.toString();
+  num = (num < 0) ? Math.abs(num) : Math.abs(num) * -1;
+
+  return num;
+}
+
+let Convert2Percent = (val)  => {
+  return (val / 100);
 }
 
 let Str2Num = (str) => {
@@ -212,13 +254,15 @@ let Subtract = (a, b = 0) => a - b;
 let Multiply = (a, b = 1) => a * b;
 let Divide = (a, b = 1) => a / b;
 
-let operate = (o, a, b) => {
-  // if(!IsNumber(a) || !IsNumber(b)) 
-  //   return console.error('ERROR, argument must be type of number');
+let AllClear = () => {
+  dispEvalEl.innerHTML = '0';
+  dispEquateEl.innerHTML = '0';
 
-  o = o.toLowerCase();
-  
-  switch(o) {
+  Reset();
+}
+
+let operate = (o, a, b) => {
+  switch (o.toLowerCase()) {
     case 'add':
       return Add(a, b);
     case 'subtract':

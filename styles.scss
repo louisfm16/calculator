@@ -138,7 +138,7 @@ nav {
 
   & .abs-cntr {
     width: 90%;
-    overflow: none;
+    overflow: hidden;
 
     p {
       text-align: right;
@@ -147,9 +147,14 @@ nav {
 
   &--eval {
     font-size: 4em;
+    overflow: none;
   }
 
   &--equation {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline;
+    float: right;
     font-size: 1.1em;
   }
 
