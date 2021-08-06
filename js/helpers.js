@@ -3,7 +3,7 @@ export let helpers = {
     return typeof val === 'number';
   },
   IsFloat(val) {
-    return val > Math.floor(v);
+    return val > Math.floor(val);
   },
   IsString(val) {
     return typeof val === 'string';
