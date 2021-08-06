@@ -1,10 +1,6 @@
-// DOM Loaded check
-if (document.readyState === "complete" ||
-  (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-  Init();
-} else {
-  document.addEventListener("DOMContentLoaded", () => Init());
-}
+import {helpers as h} from './helpers.js';
+
+document.addEventListener("DOMContentLoaded", () => Init());
 
 //#region Variables
 // -- Elements
@@ -27,6 +23,7 @@ let Init = function () {
   dispEvalEl = document.getElementById('display--eval');
   dispEquateEl = document.getElementById('display--equation');
 
+  // helpers.hello();
   SetUpListeners();
 }
 
@@ -46,11 +43,11 @@ let UpdateEquation = () => {
     if(i == 0) {
       equateStr += `${calcs[i].result} `;
     } else {
-      equateStr += ` ${GetOperatorSymbol(calcs[i].operator)} ${calcs[i].num2} `;
+      equateStr += ` ${h.GetOperatorSymbol(calcs[i].operator)} ${calcs[i].num2} `;
     }
   }
 
-  equateStr += ` ${GetOperatorSymbol(currUserOperator)} ${currUserVal}`;
+  equateStr += ` ${h.GetOperatorSymbol(currUserOperator)} ${currUserVal}`;
   dispEquateEl.innerHTML = equateStr;
 }
 
@@ -93,16 +90,16 @@ let SetUpListeners = () => {
 }
 
 let HandleNumClick = function () {
-  currUserVal = (calcs.length <= 0) && (currUserOperator === 'equal') ? '' : currUserVal.toString();
+  currUserVal = (calcs.length <= 0) && (currUserOperator === 'equal') ? '' : h.Convert2String(currUserVal);
 
   // Check & set up decimal
   if (this.dataset.number === '.') {
-    if(IsFloat(currUserVal)) return;
+    if(h.IsFloat(currUserVal)) return;
 
     return (currUserVal += '.');
   } else {
     currUserVal += this.dataset.number;
-    currUserVal = Str2Float(currUserVal);
+    currUserVal = h.Convert2Number(currUserVal);
   }
 
   // If no calcs, just update display with the same value
@@ -114,6 +111,7 @@ let HandleNumClick = function () {
 
   lastClicked = 'number';
   console.clear();
+  console.warn(this.dataset.number);
   console.table(calcs);
 }
 
@@ -126,7 +124,7 @@ let HandleOperatorClick = function () {
     currUserOperator = this.dataset.operator;
     UpdateDisplay(currUserVal);
   } else if (lastClicked !== 'operator') { // If the user last clicked a number
-    currUserVal = IsFloat(currUserVal) ? Str2Float(currUserVal) : Str2Num(currUserVal);
+    currUserVal = h.Convert2Number(currUserVal);
 
     // Fisrt calc, set up
     if (calcs.length === 0) {
@@ -155,11 +153,11 @@ let HandleOperatorClick = function () {
       if (currUserVal === '-') 
         currUserOperator = this.dataset.operator;
 
-      currUserVal = ToggleNegative(currUserVal);
+      currUserVal = h.ToggleNegativeSign(currUserVal); // Used ToggleNegative before Refactoring
     }
     else if (currUserOperator === 'subtract' &&
       this.dataset.operator === 'subtract') {
-        currUserVal = ToggleNegative(currUserVal);
+      currUserVal = h.ToggleNegativeSign(currUserVal);
     } else {
       currUserOperator = this.dataset.operator;
       currUserVal = '';
@@ -177,32 +175,18 @@ let HandleFunctionClick = function () {
       AllClear();
       break;
     case 'integer':
-      currUserVal = InvertNumber(currUserVal);
+      currUserVal = h.InvertVal(currUserVal);
       UpdateDisplay(currUserVal);
       break;
     case 'percent':
-      currUserVal = Convert2Percent(currUserVal);
+      currUserVal = h.Convert2Percent(currUserVal);
       break;
   }
 }
 //#endregion Handler Functions
 
 //#region Helper Function
-let IsNumber = (n) => {
-  return typeof n === 'number';
-}
-
-let IsFloat = (n) => {
-  return n > Math.floor(n);
-}
-
-let InvertVal = (n) => {
-  if(n < 0)
-    return Math.abs(n);
-
-  return -Math.abs(n);
-}
-
+// Keeping this as reference incase anything breaks
 // Must take in whole value and find - 
 let ToggleNegative = (val) => {
   if(val === '-')
@@ -210,42 +194,6 @@ let ToggleNegative = (val) => {
   return '-';
 }
 
-let InvertNumber = (num) => {
-  // Check if number
-  num = (typeof num === 'number') ? num : num.toString();
-  num = (num < 0) ? Math.abs(num) : Math.abs(num) * -1;
-
-  return num;
-}
-
-let Convert2Percent = (val)  => {
-  return (val / 100);
-}
-
-let Str2Num = (str) => {
-  let newNum = parseInt(str, 10);
-  return !isNaN(newNum) ? newNum : console.error('ERROR, must be a valid number');
-}
-
-let Str2Float = (str) => {
-  let newNum = parseFloat(str);
-  return !isNaN(newNum) ? newNum : console.error('ERROR, must be a valid float');
-}
-
-let GetOperatorSymbol = (operator) => {
-  switch (operator) {
-    case 'add':
-      return '+';
-    case 'subtract':
-      return '-';
-    case 'multiply':
-      return '*';
-    case 'divide':
-      return '/';
-    default:
-      return '';
-  }
-}
 //#endregion Helper Functions
 
 //#region Calculator Functions
