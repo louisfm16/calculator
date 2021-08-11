@@ -1,7 +1,7 @@
 import { helpers as h } from './helpers.js';
 
 export let CalcApp = (function () {
-  //#region Variables
+  //#region [Standard] Variables
   // -- Elements
   let appEl,
     dispEvalEl,
@@ -15,25 +15,50 @@ export let CalcApp = (function () {
   let calcs = [];
   //#endregion Variables
 
+  //#region [Standard] Setters, Getters, & Helpers
+  let calculator = {
+    getCurrUserVal: () => currUserVal,
+    setCurrUserVal: (newVal) => currUserVal = newVal,
+    getCurrUserOperator: () => currUserOperator,
+    setCurrUserOperator: (newVal) => currUserOperator = newVal,
+    getLastClicked: () => lastClicked,
+    setLastClicked: (newVal) => lastClicked = newVal,
+    getDispEvalEl: () => dispEvalEl.innerText,
+    setDispEvalEl: (newVal) => dispEvalEl.innerText = newVal,
+    getDispEquateEl: () => dispEquateEl.innerText,
+    setDispEquateEl: (newVal) => dispEquateEl.innerText = newVal,
+    getCalcs: () => calcs,
+    isCalcsEmpty: () => h.IsEmpty(calcs)
+  };
+  //#endregion Setters & Getters
 
-
-  let calc = {};
-  //#region App Functions
-  calc.Init = function () {
+  //#region [Standard] App Functions
+  calculator.Init = function () {
     appEl = document.getElementById('app');
     dispEvalEl = document.getElementById('display--eval');
     dispEquateEl = document.getElementById('display--equation');
   }
-  calc.UpdateDisplay = function(newVal) {
-    this.UpdateEval(newVal);
-    this.UpdateEquation(); // Setup for later
+  
+  calculator.UpdateDisplay = function (val, ovrWrtStr) {
+    if (calcs.length <= 0) { // If calcs is empty, cant use operate function
+      this.UpdateEval(val);
+    } else {
+      this.UpdateEval(this.Operate(
+        this.getCurrUserOperator(), 
+        calcs[calcs.length - 1].result, 
+        this.getCurrUserVal()
+      ));
+    }
+
+    this.UpdateEquation(ovrWrtStr); // Setup for later
   }
 
-  calc.UpdateEval = function(newVal) {
-    dispEvalEl.innerHTML = newVal;
+  calculator.UpdateEval = function(newVal) {
+    // dispEvalEl.innerHTML = newVal;
+    this.setDispEvalEl(newVal);
   }
 
-  calc.UpdateEquation = function() {
+  calculator.UpdateEquation = function(ovrWrtStr) {
     let equateStr = '';
 
     for (let i = 0; i < calcs.length; i++) {
@@ -45,21 +70,23 @@ export let CalcApp = (function () {
     }
 
     equateStr += ` ${h.GetOperatorSymbol(currUserOperator)} ${currUserVal}`;
-    dispEquateEl.innerHTML = equateStr;
+
+    // dispEquateEl.innerHTML = ovrWrtStr ? ovrWrtStr : equateStr;
+    this.setDispEquateEl(ovrWrtStr ? ovrWrtStr : equateStr);
   }
 
-  calc.AddCalculation = function(calc, lastOp) {
+  calculator.AddCalculation = function(calc, lastOp) {
     calcs.push({ ...calc });
   }
 
-  calc.EditCalculation = function(index, edits) {
+  calculator.EditCalculation = function(index, edits) {
     calcs[index] = {
       ...calcs[index],
       ...edits
     }
   }
 
-  calc.Reset = () => {
+  calculator.Reset = () => {
     currUserVal = '';
     currUserOperator = '';
     lastClicked = '';
@@ -67,36 +94,10 @@ export let CalcApp = (function () {
   }
   //#endregion App Functions
 
-  //#region Handler Function
-  calc.HandleNumClick = function(self) {
-    currUserVal = (calcs.length <= 0) && (currUserOperator === 'equal') ? '' : h.Convert2String(currUserVal);
-
-    // Check & set up decimal
-    if (self.dataset.number === '.') {
-      if (h.IsFloat(currUserVal)) return; // Returns false if the number after the decimal is zero
-
-      return (currUserVal += '.');
-    } else {
-      currUserVal += self.dataset.number;
-      currUserVal = h.Convert2Number(currUserVal);
-    }
-
-    // If no calcs, just update display with the same value
-    if (calcs.length <= 0) {
-      this.UpdateDisplay(currUserVal);
-    } else {
-      this.UpdateDisplay(this.operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal));
-    }
-
-    lastClicked = 'number';
-    console.clear();
-    console.warn(self.dataset.number);
-    console.table(calcs);
-  }
-
-  calc.HandleOperatorClick = function (self) {
+  //#region [Todo] Handler Function
+  calculator.HandleOperatorClick = function (self) {
     if (self.dataset.operator === 'equal') {
-      let tempResult = this.operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal);
+      let tempResult = this.Operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal);
 
       this.Reset();
       currUserVal = tempResult;
@@ -111,14 +112,14 @@ export let CalcApp = (function () {
           num1: 0,
           num2: currUserVal,
           operator: self.dataset.operator, // currUserOperator will be overwritten add end of function
-          result: this.operate('', currUserVal)
+          result: this.Operate('', currUserVal)
         });
       } else {
         this.AddCalculation({
           num1: calcs[calcs.length - 1].result,
           num2: currUserVal,
           operator: currUserOperator, // currUserOperator will be overwritten add end of function
-          result: this.operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal)
+          result: this.Operate(currUserOperator, calcs[calcs.length - 1].result, currUserVal)
         });
       }
 
@@ -147,37 +148,28 @@ export let CalcApp = (function () {
     console.clear();
     console.table(calcs);
   }
-
-  calc.HandleFunctionClick = function(self) {
-    switch (self.dataset.function) {
-      case 'clear':
-        this.AllClear();
-        break;
-      case 'integer':
-        currUserVal = h.InvertVal(currUserVal);
-        this.UpdateDisplay(currUserVal);
-        break;
-      case 'percent':
-        currUserVal = h.Convert2Percent(currUserVal);
-        break;
-    }
-  }
   //#endregion Handler Functions
 
-  //#region Calculator Functions
-  calc.Add = (a, b = 0) => a + b;
-  calc.Subtract = (a, b = 0) => a - b;
-  calc.Multiply = (a, b = 1) => a * b;
-  calc.Divide = (a, b = 1) => a / b;
+  //#region [Todo] Calculator Functions
+  calculator.Add = (a, b = 0) => a + b;
+  calculator.Subtract = (a, b = 0) => a - b;
+  calculator.Multiply = (a, b = 1) => a * b;
+  calculator.Divide = (a, b = 1) => a / b;
 
-  calc.AllClear = function() {
-    dispEvalEl.innerHTML = '0';
-    dispEquateEl.innerHTML = '0';
-
+  calculator.AllClear = function () {
     this.Reset();
+    this.UpdateDisplay('0', '0');
   }
-
-  calc.operate = function(o, a, b) {
+  calculator.InvertCurrUserVal = function() {
+    let invertedVal = h.InvertVal(this.getCurrUserVal());
+    this.setCurrUserVal(invertedVal);
+  };
+  calculator.CurrUserVal2Percent = function () {
+    let invertedVal = h.Convert2Percent(this.getCurrUserVal());
+    this.setCurrUserVal(invertedVal)
+  }
+  
+  calculator.Operate = function(o, a, b) {
     switch (o.toLowerCase()) {
       case 'add':
         return this.Add(a, b);
@@ -191,33 +183,7 @@ export let CalcApp = (function () {
         return a;
     }
   }
-
   //#endregion Calculator Functions
 
-  return calc;
+  return calculator;
 }());
-
-
-
-
-/*
-*
-*
-*
-*
-*
-*
-// Keeping this as reference incase anything breaks
-// Must take in whole value and find - 
-let ToggleNegative = (val) => {
-  if (val === '-')
-    return '';
-  return '-';
-}
-*
-*
-*
-*
-*
-*
-*/

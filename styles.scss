@@ -6,6 +6,19 @@ $fg-color: #14213D;
 $primary-color: #14306E;
 $secondary-color: #FCA311;
 $text-color: #E5E5E5;
+$display-color: #3B3B3B;
+
+/*
+ * Working in the sun,
+ * changing colors temporarily 
+ * Looks like CRAP!
+$bg-color: #031944;
+$fg-color: #0F6988;
+$primary-color: #00ADBE;
+$secondary-color: #F0BB31;
+$text-color: #FFEDBD;
+$display-color: #0F6988;
+*/
 
 @mixin vertical-align($align: middle) {
   &:before {
@@ -133,7 +146,7 @@ nav {
 
   // background-color: lighten(#606F49, 10%);
   // color: rgba(darken($text-color, 70%), 0.8);
-  background-color: #3B3B3B;
+  background-color: $display-color;
   color: rgba(darken($text-color, 10%), 0.7);
 
   & .abs-cntr {

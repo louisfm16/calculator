@@ -1,4 +1,7 @@
 export let helpers = {
+  IsEmpty(val) {
+    return val === undefined || val.length <= 0? true : false;
+  },
   IsNumber(val) {
     return typeof val === 'number';
   },
