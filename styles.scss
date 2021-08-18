@@ -12,13 +12,13 @@ $display-color: #3B3B3B;
  * Working in the sun,
  * changing colors temporarily 
  * Looks like CRAP!
-$bg-color: #031944;
-$fg-color: #0F6988;
-$primary-color: #00ADBE;
-$secondary-color: #F0BB31;
-$text-color: #FFEDBD;
-$display-color: #0F6988;
-*/
+ */
+// $bg-color: #031944;
+// $fg-color: #0F6988;
+// $primary-color: #00ADBE;
+// $secondary-color: #F0BB31;
+// $text-color: #FFEDBD;
+// $display-color: #0F6988;
 
 @mixin vertical-align($align: middle) {
   &:before {
