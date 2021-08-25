@@ -8,6 +8,13 @@ export let helpers = {
   IsFloat(val) {
     return val > Math.floor(val);
   },
+  IsBaseFloat(val) {
+    if(typeof val === 'string' && val.length > 0) {
+      return !this.IsFloat(parseFloat(val)) ? true : false; // if after parsing the value is still a float, it was not a base float ie .0
+    }
+
+    return false;
+  },
   IsString(val) {
     return typeof val === 'string';
   },
@@ -25,6 +32,9 @@ export let helpers = {
   },
   Convert2Number(val) {
     return (!this.IsNumber(val)) ? parseFloat(val) : val;
+  },
+  Convert2Float(val) {
+    return (!this.IsNumber(val)) ? parseFloat(val).toFixed(1) : val;
   },
   Convert2Percent(val) {
     return (this.Convert2Number(val) / 100);

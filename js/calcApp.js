@@ -17,7 +17,12 @@ export let CalcApp = (function () {
 
   //#region Setters, Getters, & Helpers
   let calculator = {
-    getCurrUserVal: () => currUserVal,
+    // getCurrUserVal: () => currUserVal,
+    getCurrUserVal: () => {
+      console.log(`--- ${typeof currUserVal} - ${currUserVal} ---`);
+      
+      return currUserVal;
+    },
     setCurrUserVal: (newVal) => currUserVal = newVal,
     getCurrUserOperator: () => currUserOperator,
     setCurrUserOperator: (newVal) => currUserOperator = newVal,
@@ -46,13 +51,23 @@ export let CalcApp = (function () {
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
+    let currUserVal = this.getCurrUserVal();
+
     if (!this.isCalcsEmpty()) { // If calcs is empty, cant use operate function
+      // The user has only inputed a decimal or is adding zeros to an already zero decimal value
+      if (val === '.' || h.Convert2Number(val) === 0)
+        currUserVal = 0;
+
       val = this.Operate(
         this.getCurrUserOperator(), 
         this.getLastResult(), 
-        this.getCurrUserVal()
+        currUserVal
       );
     }
+    else if (this.isCalcsEmpty() && val === '.') {
+      val = '0.';
+    }
+
     this.UpdateEval(val);
     this.UpdateEquation(ovrWrtStr);
   }
@@ -68,7 +83,7 @@ export let CalcApp = (function () {
       equateStr += (i != 0) ? ` ${h.GetOperatorSymbol(calcs[i].operator)} ${calcs[i].num2} ` : `${calcs[i].result} `;
     }
 
-    equateStr += ` ${h.GetOperatorSymbol(currUserOperator)} ${this.getCurrUserVal()}`;
+    equateStr += ` ${h.GetOperatorSymbol(currUserOperator)} ${this.getCurrUserVal() === '.' ? '0.' : this.getCurrUserVal()}`;
 
     this.setDispEquateEl(ovrWrtStr ? ovrWrtStr : equateStr);
   }
@@ -109,6 +124,24 @@ export let CalcApp = (function () {
   calculator.CurrUserVal2Percent = function () {
     let invertedVal = h.Convert2Percent(this.getCurrUserVal());
     this.setCurrUserVal(invertedVal)
+  }
+
+  calculator.Backspace = function() {
+    let newCurrUserVal = h.Convert2String(this.getCurrUserVal());
+
+    // Remove the last number / character of the string
+    newCurrUserVal = newCurrUserVal.slice(0, -1);
+
+    if (newCurrUserVal.length <= 0)
+      newCurrUserVal = 0;
+
+    // Check if its not a float and 
+    if(!h.IsFloat(newCurrUserVal) && newCurrUserVal != '0.') {
+      newCurrUserVal = h.Convert2Number(newCurrUserVal);
+    }
+
+    this.setCurrUserVal(newCurrUserVal);
+    this.UpdateDisplay(newCurrUserVal);
   }
   
   calculator.Operate = function(o, a, b) {

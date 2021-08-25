@@ -15,6 +15,10 @@ let SetUpListeners = () => {
   let numEl = document.querySelectorAll('.btn--number');
   let operatorEl = document.querySelectorAll('.btn--operator');
   let functionEl = document.querySelectorAll('.btn--function');
+  let specialEl = document.querySelectorAll('.special-btns--btn');
+
+  // let historyEl = document.getElementById('history');
+  // let backspaceEl = document.getElementById('backspace');
 
   numEl.forEach(e => {
     e.addEventListener('click', (e) => HandleNumClick(e.target.dataset.number));
@@ -27,35 +31,40 @@ let SetUpListeners = () => {
   functionEl.forEach(e => {
     e.addEventListener('click', (e) => HandleFunctionClick(e.target.dataset.function));
   });
+
+  specialEl.forEach(e => {
+    e.addEventListener('click', (e) => HandleSpecialClick(e.target.id)); // ? Log does not spit out ID always
+  });
 }
 
 /* 
  * These will control the flow of the Calculator App,
  * CalcApp will control the behind the scenes dark magic stuff
 */
+// ! Bug when doing the following calculation (0.5+0.555) results in running 0000's
 let HandleNumClick = function (numClicked) {
-  // Replace the currUserVal if the user clicks a number
-  // right after clicking the equal sign
-  let tempVal = (
-      CalcApp.isCalcsEmpty() && (CalcApp.getCurrUserOperator() === 'equal')
-    ) ? '' : h.Convert2String(CalcApp.getCurrUserVal());
+  let tempVal = h.Convert2String(CalcApp.getCurrUserVal());
 
   // User clicked decimal point
   if (numClicked === '.') {
     if (h.IsFloat(tempVal)) return; // Do nothing if already a decimal
 
-    return (tempVal += '.'); // Convert to Decimal if not already one
+    tempVal += '.'; // Convert to Decimal if not already one
   } else { // User clicked a number
     tempVal += numClicked;
-    tempVal = h.Convert2Number(tempVal);
+    
+    // Is the user trying to add a zeros after the decimal
+    let isAddingZeros = (h.Convert2Number(tempVal) === 0 && tempVal.includes('.'));
+    tempVal = isAddingZeros ? tempVal : h.Convert2Number(tempVal);
   }
 
   CalcApp.setCurrUserVal(tempVal);
+  // Dont update display if the user clicks a decimal without a value
   CalcApp.UpdateDisplay(CalcApp.getCurrUserVal());
   CalcApp.setLastClicked('number');
 
   // Debug
-  if(_debug)
+  if(!_debug)
   {
     console.clear();
     console.warn(numClicked);
@@ -150,6 +159,21 @@ let HandleFunctionClick = function (funcClicked) {
       CalcApp.CurrUserVal2Percent();
       CalcApp.UpdateDisplay(CalcApp.getCurrUserVal());
       break;
+  }
+}
+
+let HandleSpecialClick = function (specialClicked) {
+  switch (specialClicked) {
+    case 'history':
+      //  No clue yet
+      break;
+    case 'backspace':
+      // remove the last character in currUserVal
+      CalcApp.Backspace();
+      break;
+    default:
+      // ? probably that weird bug noted in event Listener for this btn
+      console.warn(`Default was activated, ${specialClicked}`);
   }
 }
 //#endregion Handler Functions
