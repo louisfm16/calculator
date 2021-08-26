@@ -17,9 +17,6 @@ let SetUpListeners = () => {
   let functionEl = document.querySelectorAll('.btn--function');
   let specialEl = document.querySelectorAll('.special-btns--btn');
 
-  // let historyEl = document.getElementById('history');
-  // let backspaceEl = document.getElementById('backspace');
-
   numEl.forEach(e => {
     e.addEventListener('click', (e) => HandleNumClick(e.target.dataset.number));
   });
@@ -33,7 +30,8 @@ let SetUpListeners = () => {
   });
 
   specialEl.forEach(e => {
-    e.addEventListener('click', (e) => HandleSpecialClick(e.target.id)); // ? Log does not spit out ID always
+    // ? Event Bubbling here, fixed by setting data attributes to parent + child elements
+    e.addEventListener('click', (e) => HandleSpecialClick(e.target.dataset.special));
   });
 }
 
@@ -45,6 +43,10 @@ let SetUpListeners = () => {
 let HandleNumClick = function (numClicked) {
   let tempVal = h.Convert2String(CalcApp.getCurrUserVal());
 
+  if(CalcApp.getLastClicked() === 'equal') {
+    tempVal = '';
+  }
+
   // User clicked decimal point
   if (numClicked === '.') {
     if (h.IsFloat(tempVal)) return; // Do nothing if already a decimal
@@ -54,7 +56,7 @@ let HandleNumClick = function (numClicked) {
     tempVal += numClicked;
     
     // Is the user trying to add a zeros after the decimal
-    let isAddingZeros = (h.Convert2Number(tempVal) === 0 && tempVal.includes('.'));
+    let isAddingZeros = (tempVal.includes('.') && (h.Convert2Number(tempVal) === 0 || numClicked === '0'));
     tempVal = isAddingZeros ? tempVal : h.Convert2Number(tempVal);
   }
 
@@ -62,14 +64,6 @@ let HandleNumClick = function (numClicked) {
   // Dont update display if the user clicks a decimal without a value
   CalcApp.UpdateDisplay(CalcApp.getCurrUserVal());
   CalcApp.setLastClicked('number');
-
-  // Debug
-  if(!_debug)
-  {
-    console.clear();
-    console.warn(numClicked);
-    console.table(CalcApp.getCalcs());
-  }
 }
 
 let HandleOperatorClick = function (latestOp) {
@@ -89,6 +83,7 @@ let HandleOperatorClick = function (latestOp) {
     newUsrOp = latestOp;
 
     CalcApp.Reset();
+    CalcApp.setLastClicked('equal'); // ! This is gooing to bite me in the ass, look at else if below
   }
   else if (CalcApp.getLastClicked() === 'operator') { // Users last clicked an operator, thus has not clicked a new number to equate on yet
     newUsrOp = latestOp; // Update the newUsrOp right of the bat
@@ -139,11 +134,6 @@ let HandleOperatorClick = function (latestOp) {
   else {
     CalcApp.UpdateEquation(); // Updates equation inside
   }
-
-  if (!_debug) {
-    console.clear();
-    console.table(CalcApp.getCalcs());
-  }
 }
 
 let HandleFunctionClick = function (funcClicked) {
@@ -165,7 +155,7 @@ let HandleFunctionClick = function (funcClicked) {
 let HandleSpecialClick = function (specialClicked) {
   switch (specialClicked) {
     case 'history':
-      //  No clue yet
+      //  Some clue now
       break;
     case 'backspace':
       // remove the last character in currUserVal

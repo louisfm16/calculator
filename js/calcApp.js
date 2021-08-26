@@ -3,13 +3,12 @@ import { helpers as h } from './helpers.js';
 export let CalcApp = (function () {
   //#region Variables
   // -- Elements
-  let appEl,
-    dispEvalEl,
-    dispEquateEl;
-  // -- Flags
+  let appEl;
+  let dispEvalEl;
+  let dispEquateEl;
 
   // -- Other
-  let currUserVal = '';
+  let currUserVal = '0';
   let currUserOperator = '';
   let lastClicked = '';
   let calcs = [];
@@ -17,12 +16,7 @@ export let CalcApp = (function () {
 
   //#region Setters, Getters, & Helpers
   let calculator = {
-    // getCurrUserVal: () => currUserVal,
-    getCurrUserVal: () => {
-      console.log(`--- ${typeof currUserVal} - ${currUserVal} ---`);
-      
-      return currUserVal;
-    },
+    getCurrUserVal: () => currUserVal,
     setCurrUserVal: (newVal) => currUserVal = newVal,
     getCurrUserOperator: () => currUserOperator,
     setCurrUserOperator: (newVal) => currUserOperator = newVal,
@@ -32,7 +26,7 @@ export let CalcApp = (function () {
     setDispEvalEl: (newVal) => dispEvalEl.innerText = newVal,
     getDispEquateEl: () => dispEquateEl.innerText,
     setDispEquateEl: (newVal) => dispEquateEl.innerText = newVal,
-    getLastResult: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].result : 'No results Found',
+    getLastResult: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].result : 0, // if no results, return a default of zero
     getLastOperator: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].operator : 'No operators Found',
     getCalcs: () => calcs,
     isCalcsEmpty: () => h.IsEmpty(calcs)
@@ -40,11 +34,7 @@ export let CalcApp = (function () {
   //#endregion Setters & Getters
 
   //#region App Functions
-  calculator.Init = function (/* app, eval, equate */) {// Adding parameters breaks this, strict mode or whatever idk
-    // appEl = document.getElementById(app);
-    // dispEvalEl = document.getElementById(eval);
-    // dispEquateEl = document.getElementById(equate);
-
+  calculator.Init = function () {
     appEl = document.getElementById('app');
     dispEvalEl = document.getElementById('display--eval');
     dispEquateEl = document.getElementById('display--equation');
@@ -130,13 +120,10 @@ export let CalcApp = (function () {
     let newCurrUserVal = h.Convert2String(this.getCurrUserVal());
 
     // Remove the last number / character of the string
-    newCurrUserVal = newCurrUserVal.slice(0, -1);
+    newCurrUserVal = newCurrUserVal.length <= 1 ? '0' : newCurrUserVal.slice(0, -1);
 
-    if (newCurrUserVal.length <= 0)
-      newCurrUserVal = 0;
-
-    // Check if its not a float and 
-    if(!h.IsFloat(newCurrUserVal) && newCurrUserVal != '0.') {
+    // Check if it doesnt have a decimal
+    if(!newCurrUserVal.includes('.')) {
       newCurrUserVal = h.Convert2Number(newCurrUserVal);
     }
 
