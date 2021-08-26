@@ -82,6 +82,10 @@ let HandleOperatorClick = function (latestOp) {
     newUsrVal = tempResult;
     newUsrOp = latestOp;
 
+    // ? Archive Calcs to history here
+    if(!CalcApp.isCalcsEmpty())
+      CalcApp.Archive();
+
     CalcApp.Reset();
     CalcApp.setLastClicked('equal'); // ! This is gooing to bite me in the ass, look at else if below
   }

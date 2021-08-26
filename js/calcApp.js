@@ -12,6 +12,7 @@ export let CalcApp = (function () {
   let currUserOperator = '';
   let lastClicked = '';
   let calcs = [];
+  let history = [];
   //#endregion Variables
 
   //#region Setters, Getters, & Helpers
@@ -29,7 +30,30 @@ export let CalcApp = (function () {
     getLastResult: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].result : 0, // if no results, return a default of zero
     getLastOperator: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].operator : 'No operators Found',
     getCalcs: () => calcs,
-    isCalcsEmpty: () => h.IsEmpty(calcs)
+    isCalcsEmpty: () => h.IsEmpty(calcs),
+    getHistory: () => history,
+    setHistory: () => {
+      let latestOperation = calculator.Operate(
+        calculator.getCurrUserOperator(), 
+        calculator.getLastResult(), 
+        calculator.getCurrUserVal()
+      );
+
+      history = [
+        ...history,
+        // ? May be better to append to calcs instead of saving curr Val and Operate
+        // ? it may disable our use of UpdateEquate though
+        {
+          'calcs': calculator.getCalcs(),
+          currUserVal: latestOperation,
+          currUserOperator: calculator.getCurrUserOperator(),
+          time: '00:00:00'
+        }
+      ];
+    },
+    saveHistory: () => {
+      window.localStorage.setItem('history', JSON.stringify(history));
+    }
   };
   //#endregion Setters & Getters
 
@@ -38,6 +62,10 @@ export let CalcApp = (function () {
     appEl = document.getElementById('app');
     dispEvalEl = document.getElementById('display--eval');
     dispEquateEl = document.getElementById('display--equation');
+
+    if (window.localStorage.getItem('history')) {
+      history = JSON.parse(window.localStorage.getItem('history'));
+    }
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
@@ -129,6 +157,11 @@ export let CalcApp = (function () {
 
     this.setCurrUserVal(newCurrUserVal);
     this.UpdateDisplay(newCurrUserVal);
+  }
+
+  calculator.Archive = function() {
+    this.setHistory();
+    this.saveHistory();
   }
   
   calculator.Operate = function(o, a, b) {
