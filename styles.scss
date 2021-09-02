@@ -102,10 +102,11 @@ html, body {
   border-radius: 20px;
   background-color: $bg-color;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  overflow: hidden;
 }
 
 nav {
-  // background-color: $color1;
+  // background-color: $secondary-color;
   position: relative;
   height: 30px;
   margin-bottom: 10px;
@@ -132,6 +133,51 @@ nav {
   #theme-btn {
     
   }
+}
+
+// * Insert history pane here
+.history-panel {
+  height: 0%;
+  width: 100%;
+  border-radius: 5px;
+  background-color: lighten($bg-color, 2%);
+  transition: height 1s ease-in-out;
+  // overflow-y: scroll;
+  overflow: hidden;
+
+  &--item {
+    position: relative;
+    // height: 90px;
+    height: 25%;
+    border-bottom: 1px solid #323232;
+    padding: 25px 15px 0 15px;
+
+    & .timestamp {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      color: darken($text-color, 40);
+      font-size: 0.8em;
+    }
+    
+    & .result {
+      // border: 1px solid red;
+      text-align: right;
+      font-size: 1.7em;
+      margin-bottom: 15px;
+      color: darken($text-color, 10);
+    }
+    
+    & .equation {
+      text-align: right;
+      font-size: 1em;
+      color: darken($text-color, 20);
+    }
+  }
+}
+
+.history-panel--show {
+  height: 70%;
 }
 
 #display {

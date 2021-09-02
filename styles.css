@@ -121,6 +121,7 @@ html, body {
   background-color: #0F192E;
   -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
           box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  overflow: hidden;
 }
 
 nav {
@@ -142,6 +143,48 @@ nav p {
   width: 80%;
   font-size: 1.4em;
   text-align: center;
+}
+
+.history-panel {
+  height: 0%;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #121d36;
+  -webkit-transition: height 1s ease-in-out;
+  transition: height 1s ease-in-out;
+  overflow: hidden;
+}
+
+.history-panel--item {
+  position: relative;
+  height: 25%;
+  border-bottom: 1px solid #323232;
+  padding: 25px 15px 0 15px;
+}
+
+.history-panel--item .timestamp {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  color: #7f7f7f;
+  font-size: 0.8em;
+}
+
+.history-panel--item .result {
+  text-align: right;
+  font-size: 1.7em;
+  margin-bottom: 15px;
+  color: #cccccc;
+}
+
+.history-panel--item .equation {
+  text-align: right;
+  font-size: 1em;
+  color: #b2b2b2;
+}
+
+.history-panel--show {
+  height: 70%;
 }
 
 #display {
