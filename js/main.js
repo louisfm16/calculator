@@ -87,7 +87,7 @@ let HandleOperatorClick = function (latestOp) {
       CalcApp.Archive();
 
     CalcApp.Reset();
-    CalcApp.setLastClicked('equal'); // ! This is gooing to bite me in the ass, look at else if below
+    CalcApp.setLastClicked('equal'); // ! This is going to bite me in the ass, look at else if below
   }
   else if (CalcApp.getLastClicked() === 'operator') { // Users last clicked an operator, thus has not clicked a new number to equate on yet
     newUsrOp = latestOp; // Update the newUsrOp right of the bat

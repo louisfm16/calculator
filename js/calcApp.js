@@ -44,15 +44,25 @@ export let CalcApp = (function () {
         // ? May be better to append to calcs instead of saving curr Val and Operate
         // ? it may disable our use of UpdateEquate though
         {
-          'calcs': calculator.getCalcs(),
-          currUserVal: latestOperation,
+          calcs: calculator.getCalcs(),
+          currUserVal: calculator.getCurrUserVal(),
           currUserOperator: calculator.getCurrUserOperator(),
-          time: '00:00:00'
+          result: latestOperation,
+          timestamp: h.timeStamp()
         }
       ];
     },
     saveHistory: () => {
       window.localStorage.setItem('history', JSON.stringify(history));
+
+      let his = JSON.parse(window.localStorage.getItem('history'));
+      his.forEach(h => {
+        console.log(`${calculator.FormatHistoryEquations(h)} = ${h.result}`);
+      });
+    },
+    clearHistory: () => {
+      history = [];
+      window.localStorage.removeItem('history');
     }
   };
   //#endregion Setters & Getters
@@ -66,6 +76,8 @@ export let CalcApp = (function () {
     if (window.localStorage.getItem('history')) {
       history = JSON.parse(window.localStorage.getItem('history'));
     }
+
+    calculator.clearHistory(); // ! For testing only
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
@@ -122,6 +134,19 @@ export let CalcApp = (function () {
     this.setCurrUserOperator('');
     this.setLastClicked('');
     calcs = [];
+  }
+
+  calculator.FormatHistoryEquations = function (history) {
+    let equateStr = '';
+    let calcs = history.calcs;
+
+    for (let i = 0; i < calcs.length; i++) {
+      equateStr += (i != 0) ? `${h.GetOperatorSymbol(calcs[i].operator)} ${calcs[i].num2} ` : `${calcs[i].result} `;
+    }
+
+    equateStr += `${h.GetOperatorSymbol(history.currUserOperator)} ${history.currUserVal}`;
+
+    return equateStr;
   }
   //#endregion App Functions
 
