@@ -6,6 +6,7 @@ export let CalcApp = (function () {
   let appEl;
   let dispEvalEl;
   let dispEquateEl;
+  let historyPanelEl;
 
   // -- Other
   let currUserVal = '0';
@@ -72,12 +73,14 @@ export let CalcApp = (function () {
     appEl = document.getElementById('app');
     dispEvalEl = document.getElementById('display--eval');
     dispEquateEl = document.getElementById('display--equation');
+    historyPanelEl = document.getElementById('history-panel');
 
     if (window.localStorage.getItem('history')) {
       history = JSON.parse(window.localStorage.getItem('history'));
     }
 
-    calculator.clearHistory(); // ! For testing only
+    calculator.LoadHistory(historyPanelEl);
+    // calculator.clearHistory(); // ! For testing only
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
@@ -169,6 +172,7 @@ export let CalcApp = (function () {
     this.setCurrUserVal(invertedVal)
   }
 
+  // TODO: Should backspace operators and previous numbers as well
   calculator.Backspace = function() {
     let newCurrUserVal = h.Convert2String(this.getCurrUserVal());
 
@@ -187,6 +191,37 @@ export let CalcApp = (function () {
   calculator.Archive = function() {
     this.setHistory();
     this.saveHistory();
+    this.LoadHistory(historyPanelEl);
+  }
+
+  calculator.LoadHistory = function(el) {
+    el.innerHTML = '';
+    let history = calculator.getHistory();
+    let item;
+
+    history.forEach((h, i) => {
+      item = document.createElement('div');
+      item.classList.add('history-panel--item');
+      item.setAttribute('data-index', i);
+
+      let timestamp = document.createElement('p');
+      timestamp.classList.add('timestamp');
+      timestamp.innerText = h.timestamp;
+
+      let result = document.createElement('p');
+      result.classList.add('result');
+      result.innerText = h.result;
+     
+      let equation = document.createElement('p');
+      equation.classList.add('equation');
+      equation.innerText = calculator.FormatHistoryEquations(h);
+
+      item.append(timestamp);
+      item.append(result);
+      item.append(equation);
+
+      el.append(item);
+    });
   }
   
   calculator.Operate = function(o, a, b) {

@@ -16,6 +16,7 @@ let SetUpListeners = () => {
   let operatorEl = document.querySelectorAll('.btn--operator');
   let functionEl = document.querySelectorAll('.btn--function');
   let specialEl = document.querySelectorAll('.special-btns--btn');
+  let historyToggle = document.getElementById('history-toggle');
 
   numEl.forEach(e => {
     e.addEventListener('click', (e) => HandleNumClick(e.target.dataset.number));
@@ -32,6 +33,10 @@ let SetUpListeners = () => {
   specialEl.forEach(e => {
     // ? Event Bubbling here, fixed by setting data attributes to parent + child elements
     e.addEventListener('click', (e) => HandleSpecialClick(e.target.dataset.special));
+  });
+
+  historyToggle.addEventListener('click', (e) => {
+    ToggleHistoryPanel();
   });
 }
 
@@ -83,7 +88,7 @@ let HandleOperatorClick = function (latestOp) {
     newUsrOp = latestOp;
 
     // ? Archive Calcs to history here
-    if(!CalcApp.isCalcsEmpty())
+    if(!CalcApp.isCalcsEmpty()) 
       CalcApp.Archive();
 
     CalcApp.Reset();
@@ -159,7 +164,8 @@ let HandleFunctionClick = function (funcClicked) {
 let HandleSpecialClick = function (specialClicked) {
   switch (specialClicked) {
     case 'history':
-      //  Some clue now
+      // Clear history
+      CalcApp.clearHistory();
       break;
     case 'backspace':
       // remove the last character in currUserVal
@@ -171,3 +177,11 @@ let HandleSpecialClick = function (specialClicked) {
   }
 }
 //#endregion Handler Functions
+
+let ToggleHistoryPanel = function(toggle) {
+  let hPanel = document.getElementById('history-panel');
+  hPanel.classList.toggle('history-panel--show');
+
+  // Keep the latest data added in view
+  setTimeout(function () { hPanel.scrollTop = hPanel.scrollHeight;}, 1000); 
+}

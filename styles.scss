@@ -1,24 +1,19 @@
 *,*:before,*:after{box-sizing:border-box}html,body,div,span,object,iframe,figure,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,code,em,img,small,strike,strong,sub,sup,tt,b,u,i,ol,ul,li,fieldset,form,label,table,caption,tbody,tfoot,thead,tr,th,td,main,canvas,embed,footer,header,nav,section,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}footer,header,nav,section,main{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:"";content:none}table{border-collapse:collapse;border-spacing:0}input{-webkit-appearance:none;border-radius:0}
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap');
 
-$bg-color: #0F192E;
-$fg-color: #14213D;
-$primary-color: #14306E;
-$secondary-color: #FCA311;
-$text-color: #E5E5E5;
 $display-color: #3B3B3B;
 
-/*
- * Working in the sun,
- * changing colors temporarily 
- * Looks like CRAP!
- */
-// $bg-color: #031944;
-// $fg-color: #0F6988;
-// $primary-color: #00ADBE;
-// $secondary-color: #F0BB31;
-// $text-color: #FFEDBD;
-// $display-color: #0F6988;
+// $bg-color: #1B1B1F;
+// $primary-color: #6E7E8F;
+// $fg-color: #2A3242;
+// $secondary-color: #848E98;
+// $text-color: #F1F2F3;
+
+$bg-color: #373C4C;
+$primary-color: #7D7F84;
+$fg-color: #81848F;
+$secondary-color: #BBA896;
+$text-color: #F1F2F0;
 
 @mixin vertical-align($align: middle) {
   &:before {
@@ -135,15 +130,26 @@ nav {
   }
 }
 
-// * Insert history pane here
+#history-toggle {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  height: 20px;
+  width: 25px;
+  background-color: $fg-color;
+  opacity: 0.3;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
 .history-panel {
   height: 0%;
   width: 100%;
   border-radius: 5px;
-  background-color: lighten($bg-color, 2%);
+  background-color: lighten($bg-color, 5%);
   transition: height 1s ease-in-out;
-  // overflow-y: scroll;
   overflow: hidden;
+	overflow-y: scroll;
 
   &--item {
     position: relative;
@@ -178,6 +184,21 @@ nav {
 
 .history-panel--show {
   height: 70%;
+}
+
+#history-panel::-webkit-scrollbar-track{
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+	background-color: $bg-color;
+}
+
+#history-panel::-webkit-scrollbar{
+	width: 5px;
+	background-color: $bg-color;
+}
+
+#history-panel::-webkit-scrollbar-thumb{
+	background-color: $fg-color;
+  opacity: 0.2;
 }
 
 #display {
@@ -315,10 +336,10 @@ nav {
 .btn {
   @include vertical-align;
   text-align: center;
-  background-color: $primary-color;
+  background-color: darken($primary-color, 10%);
   cursor: pointer;
   font-size: 1.6em;
-  border: 10px solid darken($primary-color, 5%);
+  border: 10px solid darken($primary-color, 15%);
   border-radius: 5px;
   transition: all ease-in-out 0.1s;
   // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -347,7 +368,8 @@ nav {
     height: 100%;
     width: 40%;
     margin-left: 10%;
-    border: 7px solid darken($primary-color, 5%);
+    background-color: darken($fg-color, 0%);
+    border: 7px solid darken($fg-color, 5%);
     font-size: 1.2em;
 
     &:hover {
@@ -361,9 +383,9 @@ nav {
   position: relative;
   height: 60%;
   display: grid;
-  background-color: lighten($bg-color, 1%);
+  background-color: lighten($bg-color, 5%);
   border-radius: 5px;
-  background-color: $fg-color;
+  // background-color: $fg-color;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   gap: 5%;
@@ -400,8 +422,8 @@ nav {
     }
 
     &--number {
-      background-color: darken($primary-color, 5%);
-      border: 10px solid darken($primary-color, 10%);
+      background-color: $fg-color;
+      border: 10px solid darken($fg-color, 5%);
 
       &:hover {
         border-width: 7px;
