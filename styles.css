@@ -166,9 +166,11 @@ nav p {
 
 .history-panel--item {
   position: relative;
-  height: 25%;
+  cursor: pointer;
+  height: 100px;
   border-bottom: 1px solid #323232;
   padding: 25px 15px 0 15px;
+  margin: 1px 0;
 }
 
 .history-panel--item .timestamp {
@@ -218,7 +220,7 @@ nav p {
   border-radius: 5px;
   -webkit-box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.6);
           box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.6);
-  margin: 20px 0;
+  margin: 15px 0;
   background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(0.2) rotate(180)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(4, 90%, 58%, 0)'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='hsla(0, 0%, 0%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-140,-15)' fill='url(%23a)'/></svg>");
   text-shadow: inset -1px 2px 1px rgba(0, 0, 0, 0.1), -1px 2px 1px rgba(0, 0, 0, 0.1);
   background-color: #3B3B3B;
@@ -424,8 +426,8 @@ nav p {
   background-color: #64666a;
   cursor: pointer;
   font-size: 1.6em;
-  border: 10px solid #58595d;
-  border-radius: 5px;
+  border: 8px solid #58595d;
+  border-radius: 2px;
   -webkit-transition: all ease-in-out 0.1s;
   transition: all ease-in-out 0.1s;
   -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 6px;
@@ -446,7 +448,8 @@ nav p {
 }
 
 .btn:hover {
-  border-width: 7px;
+  -webkit-filter: brightness(1.3);
+          filter: brightness(1.3);
 }
 
 .btn:active {
@@ -474,10 +477,6 @@ nav p {
   font-size: 1.2em;
 }
 
-.special-btns--btn:hover {
-  border-width: 4px;
-}
-
 #calulator-btns {
   padding: 15px;
   position: relative;
@@ -485,7 +484,6 @@ nav p {
   display: -ms-grid;
   display: grid;
   background-color: #42485b;
-  border-radius: 5px;
   -ms-grid-columns: 1fr 1fr 1fr 1fr;
       grid-template-columns: 1fr 1fr 1fr 1fr;
   -ms-grid-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -501,11 +499,7 @@ nav p {
 
 #calulator-btns #clear {
   background-color: #BBA896;
-  border: 10px solid #a78e77;
-}
-
-#calulator-btns #clear:hover {
-  border-width: 7px;
+  border-color: #a78e77;
 }
 
 #calulator-btns #clear:active {
@@ -515,20 +509,12 @@ nav p {
 
 #calulator-btns #equal {
   background-color: #BBA896;
-  border: 10px solid #a78e77;
-}
-
-#calulator-btns #equal:hover {
-  border-width: 7px;
+  border-color: #a78e77;
 }
 
 #calulator-btns .btn--number {
   background-color: #81848F;
-  border: 10px solid #747783;
-}
-
-#calulator-btns .btn--number:hover {
-  border-width: 7px;
+  border-color: #747783;
 }
 
 @media only screen and (max-width: 500px) {

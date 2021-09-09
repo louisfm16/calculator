@@ -31,39 +31,60 @@ export let CalcApp = (function () {
     getLastResult: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].result : 0, // if no results, return a default of zero
     getLastOperator: () => !calculator.isCalcsEmpty() ? calcs[calcs.length - 1].operator : 'No operators Found',
     getCalcs: () => calcs,
+    setCalcs: (newCalcs) => {
+      calcs = newCalcs;
+    },
     isCalcsEmpty: () => h.IsEmpty(calcs),
-    getHistory: () => history,
+    getHistory: (i) => {
+      if (i && (history.length - 1) >= i) {
+          return history[i];
+      }
+      
+      return history;
+    },
     setHistory: () => {
+
+      console.log('Before Set History: ');
+      console.log(calculator.getHistory());
+
       let latestOperation = calculator.Operate(
         calculator.getCurrUserOperator(), 
         calculator.getLastResult(), 
         calculator.getCurrUserVal()
       );
 
-      history = [
-        ...history,
-        // ? May be better to append to calcs instead of saving curr Val and Operate
-        // ? it may disable our use of UpdateEquate though
-        {
-          calcs: calculator.getCalcs(),
-          currUserVal: calculator.getCurrUserVal(),
-          currUserOperator: calculator.getCurrUserOperator(),
-          result: latestOperation,
-          timestamp: h.timeStamp()
-        }
-      ];
+      // history = [
+      //   ...history,
+      //   // ? May be better to append to calcs instead of saving curr Val and Operate
+      //   // ? it may disable our use of UpdateEquate though
+      //   {
+      //     calcs: calculator.getCalcs(),
+      //     currUserVal: calculator.getCurrUserVal(),
+      //     currUserOperator: calculator.getCurrUserOperator(),
+      //     result: latestOperation,
+      //     timestamp: h.timeStamp()
+      //   }
+      // ];
+
+      history.push({
+        calcs: calculator.getCalcs(),
+        currUserVal: calculator.getCurrUserVal(),
+        currUserOperator: calculator.getCurrUserOperator(),
+        result: latestOperation,
+        timestamp: h.timeStamp()
+      });
+
+
+      console.log('After Set History: ');
+      console.log(calculator.getHistory());
     },
     saveHistory: () => {
       window.localStorage.setItem('history', JSON.stringify(history));
-
-      let his = JSON.parse(window.localStorage.getItem('history'));
-      his.forEach(h => {
-        console.log(`${calculator.FormatHistoryEquations(h)} = ${h.result}`);
-      });
     },
     clearHistory: () => {
       history = [];
       window.localStorage.removeItem('history');
+      historyPanelEl.innerHTML = ''; // ! I dont like this placement
     }
   };
   //#endregion Setters & Getters
@@ -80,6 +101,8 @@ export let CalcApp = (function () {
     }
 
     calculator.LoadHistory(historyPanelEl);
+    console.log('Init History: ');
+    console.log(calculator.getHistory());
     // calculator.clearHistory(); // ! For testing only
   }
   
@@ -192,6 +215,9 @@ export let CalcApp = (function () {
     this.setHistory();
     this.saveHistory();
     this.LoadHistory(historyPanelEl);
+
+    console.log('Archived History: ');
+    console.log(calculator.getHistory());
   }
 
   calculator.LoadHistory = function(el) {
@@ -207,21 +233,35 @@ export let CalcApp = (function () {
       let timestamp = document.createElement('p');
       timestamp.classList.add('timestamp');
       timestamp.innerText = h.timestamp;
+      timestamp.setAttribute('data-index', i);
 
       let result = document.createElement('p');
       result.classList.add('result');
       result.innerText = h.result;
+      result.setAttribute('data-index', i);
      
       let equation = document.createElement('p');
       equation.classList.add('equation');
       equation.innerText = calculator.FormatHistoryEquations(h);
+      equation.setAttribute('data-index', i);
 
       item.append(timestamp);
       item.append(result);
       item.append(equation);
 
       el.append(item);
+      item.addEventListener('click', this.LoadPreviousHistoryItem)
     });
+  }
+  calculator.LoadPreviousHistoryItem = function(e) {
+    let h = calculator.getHistory(e.target.dataset.index);
+
+    calculator.setCurrUserVal(h.currUserVal);
+    calculator.setCurrUserOperator(h.currUserOperator);
+    calculator.setCalcs(h.calcs);
+    calculator.UpdateDisplay(h.result);
+    calculator.setLastClicked('number');
+    // TODO: Check history before and after this function
   }
   
   calculator.Operate = function(o, a, b) {

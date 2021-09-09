@@ -44,7 +44,7 @@ let SetUpListeners = () => {
  * These will control the flow of the Calculator App,
  * CalcApp will control the behind the scenes dark magic stuff
 */
-// ! Bug when doing the following calculation (0.5+0.555) results in running 0000's
+// ! Bug when doing the following calculation (0.5+0.555) results in running 0000's -- 09/08/2021 still present
 let HandleNumClick = function (numClicked) {
   let tempVal = h.Convert2String(CalcApp.getCurrUserVal());
 
@@ -183,5 +183,6 @@ let ToggleHistoryPanel = function(toggle) {
   hPanel.classList.toggle('history-panel--show');
 
   // Keep the latest data added in view
-  setTimeout(function () { hPanel.scrollTop = hPanel.scrollHeight;}, 1000); 
+  hPanel.scrollTop = hPanel.scrollHeight;
+  // setTimeout(function () { hPanel.scrollTop = hPanel.scrollHeight;}, 100); 
 }
