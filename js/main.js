@@ -40,6 +40,10 @@ let SetUpListeners = () => {
   });
 }
 
+let getHis = function () {
+  console.log(CalcApp.getHistory());
+}
+
 /* 
  * These will control the flow of the Calculator App,
  * CalcApp will control the behind the scenes dark magic stuff
@@ -128,7 +132,12 @@ let HandleOperatorClick = function (latestOp) {
       }
     }
 
+
+    // console.log('Before Calcs: ');
+    // console.log(CalcApp.getHistory());
     CalcApp.AddCalculation(newCalc);
+    // console.log('After Calcs: ');
+    // console.log(CalcApp.getHistory());
     newUsrVal = '';
     newUsrOp = latestOp;
     CalcApp.setLastClicked('operator');
@@ -170,6 +179,7 @@ let HandleSpecialClick = function (specialClicked) {
     case 'backspace':
       // remove the last character in currUserVal
       CalcApp.Backspace();
+      // getHis();
       break;
     default:
       // ? probably that weird bug noted in event Listener for this btn
@@ -184,5 +194,4 @@ let ToggleHistoryPanel = function(toggle) {
 
   // Keep the latest data added in view
   hPanel.scrollTop = hPanel.scrollHeight;
-  // setTimeout(function () { hPanel.scrollTop = hPanel.scrollHeight;}, 100); 
 }

@@ -42,10 +42,9 @@ export let CalcApp = (function () {
       
       return history;
     },
-    setHistory: () => {
-
-      console.log('Before Set History: ');
-      console.log(calculator.getHistory());
+    setHistory: (newHistory) => {
+      if(newHistory)
+        return history = newHistory;
 
       let latestOperation = calculator.Operate(
         calculator.getCurrUserOperator(), 
@@ -53,30 +52,18 @@ export let CalcApp = (function () {
         calculator.getCurrUserVal()
       );
 
-      // history = [
-      //   ...history,
-      //   // ? May be better to append to calcs instead of saving curr Val and Operate
-      //   // ? it may disable our use of UpdateEquate though
-      //   {
-      //     calcs: calculator.getCalcs(),
-      //     currUserVal: calculator.getCurrUserVal(),
-      //     currUserOperator: calculator.getCurrUserOperator(),
-      //     result: latestOperation,
-      //     timestamp: h.timeStamp()
-      //   }
-      // ];
-
-      history.push({
-        calcs: calculator.getCalcs(),
-        currUserVal: calculator.getCurrUserVal(),
-        currUserOperator: calculator.getCurrUserOperator(),
-        result: latestOperation,
-        timestamp: h.timeStamp()
-      });
-
-
-      console.log('After Set History: ');
-      console.log(calculator.getHistory());
+      history = [
+        ...history,
+        // ? May be better to append to calcs instead of saving curr Val and Operate
+        // ? it may disable our use of UpdateEquate though
+        {
+          calcs: calculator.getCalcs(),
+          currUserVal: calculator.getCurrUserVal(),
+          currUserOperator: calculator.getCurrUserOperator(),
+          result: latestOperation,
+          timestamp: h.timeStamp()
+        }
+      ];
     },
     saveHistory: () => {
       window.localStorage.setItem('history', JSON.stringify(history));
@@ -103,7 +90,6 @@ export let CalcApp = (function () {
     calculator.LoadHistory(historyPanelEl);
     console.log('Init History: ');
     console.log(calculator.getHistory());
-    // calculator.clearHistory(); // ! For testing only
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
@@ -212,12 +198,20 @@ export let CalcApp = (function () {
   }
 
   calculator.Archive = function() {
+    /*
+    * This fixes the issue with the history item clicked being overwritten
+    *
+    * The history variable is overwritten when an operator or number btn is clicked
+    * The localStorage history has not been overwritten yet at this point though
+    * Setting the history to its backup localStorage fixes the overwriting issue (ironically by overwriting it)
+    * No clue why this is happening
+    */
+    // history = JSON.parse(window.localStorage.getItem('history'));
+    this.setHistory(JSON.parse(window.localStorage.getItem('history')));
+
     this.setHistory();
     this.saveHistory();
     this.LoadHistory(historyPanelEl);
-
-    console.log('Archived History: ');
-    console.log(calculator.getHistory());
   }
 
   calculator.LoadHistory = function(el) {
@@ -254,14 +248,15 @@ export let CalcApp = (function () {
     });
   }
   calculator.LoadPreviousHistoryItem = function(e) {
+    calculator.Reset(); // * temp
+
     let h = calculator.getHistory(e.target.dataset.index);
 
+    calculator.setCalcs(h.calcs);
     calculator.setCurrUserVal(h.currUserVal);
     calculator.setCurrUserOperator(h.currUserOperator);
-    calculator.setCalcs(h.calcs);
     calculator.UpdateDisplay(h.result);
     calculator.setLastClicked('number');
-    // TODO: Check history before and after this function
   }
   
   calculator.Operate = function(o, a, b) {
