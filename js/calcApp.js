@@ -88,8 +88,6 @@ export let CalcApp = (function () {
     }
 
     calculator.LoadHistory(historyPanelEl);
-    console.log('Init History: ');
-    console.log(calculator.getHistory());
   }
   
   calculator.UpdateDisplay = function (val, ovrWrtStr) {
@@ -195,6 +193,10 @@ export let CalcApp = (function () {
 
     this.setCurrUserVal(newCurrUserVal);
     this.UpdateDisplay(newCurrUserVal);
+  }
+
+  calculator.BackspaceOperator = function() {
+    console.log(this.getCalcs())
   }
 
   calculator.Archive = function() {

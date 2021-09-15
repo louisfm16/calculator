@@ -4,10 +4,14 @@ import {CalcApp} from './calcApp.js';
 document.addEventListener("DOMContentLoaded", () => Init());
 
 const _debug = true;
+let theme = 'light';
 
 let Init = function () {
   CalcApp.Init('app', 'display--eval', 'display--equation'); // Pass in ID's for elements used by CalcApp
   SetUpListeners();
+
+  theme = window.localStorage.getItem('theme') ? window.localStorage.getItem('theme') : 'light';
+  ToggleTheme(theme);
 }
 
 //#region Handler Function
@@ -17,6 +21,7 @@ let SetUpListeners = () => {
   let functionEl = document.querySelectorAll('.btn--function');
   let specialEl = document.querySelectorAll('.special-btns--btn');
   let historyToggle = document.getElementById('history-toggle');
+  let themeBtnEl = document.getElementById('theme-btn');
 
   numEl.forEach(e => {
     e.addEventListener('click', (e) => HandleNumClick(e.target.dataset.number));
@@ -38,10 +43,8 @@ let SetUpListeners = () => {
   historyToggle.addEventListener('click', (e) => {
     ToggleHistoryPanel();
   });
-}
 
-let getHis = function () {
-  console.log(CalcApp.getHistory());
+  themeBtnEl.addEventListener('click', () => ToggleTheme());
 }
 
 /* 
@@ -132,12 +135,8 @@ let HandleOperatorClick = function (latestOp) {
       }
     }
 
-
-    // console.log('Before Calcs: ');
-    // console.log(CalcApp.getHistory());
     CalcApp.AddCalculation(newCalc);
-    // console.log('After Calcs: ');
-    // console.log(CalcApp.getHistory());
+
     newUsrVal = '';
     newUsrOp = latestOp;
     CalcApp.setLastClicked('operator');
@@ -179,7 +178,9 @@ let HandleSpecialClick = function (specialClicked) {
     case 'backspace':
       // remove the last character in currUserVal
       CalcApp.Backspace();
-      // getHis();
+      if (CalcApp.getCurrUserVal() == 0) { // Backspace operator
+
+      }
       break;
     default:
       // ? probably that weird bug noted in event Listener for this btn
@@ -192,6 +193,28 @@ let ToggleHistoryPanel = function(toggle) {
   let hPanel = document.getElementById('history-panel');
   hPanel.classList.toggle('history-panel--show');
 
+  let chevron = document.getElementById('history-toggle');
+  chevron.classList.toggle('history-toggle--show');
+
   // Keep the latest data added in view
   hPanel.scrollTop = hPanel.scrollHeight;
+}
+
+let ToggleTheme = function (t) {
+  let iconEl = document.getElementById('theme-icon');
+  let newTheme = (theme === 'light') ? 'dark' : 'light';
+
+  if(t) {
+    newTheme = t;
+  }
+  
+  document.documentElement.removeAttribute('data-theme', theme);
+  iconEl.classList.remove(`i-${theme}`);
+  document.documentElement.setAttribute('data-theme', newTheme);
+  iconEl.classList.add(`i-${newTheme}`);
+
+  theme = newTheme;
+
+  window.localStorage.setItem('theme', theme);
+  console.log('Theme: ', theme);
 }

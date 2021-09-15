@@ -50,11 +50,27 @@ input {
   border-radius: 0;
 }
 
+:root {
+  --bg-color: #373C4C;
+  --primary-color: #7D7F84;
+  --fg-color: #81848F;
+  --secondary-color: #BBA896;
+  --text-color: #F1F2F0;
+}
+
+html[data-theme="dark"] {
+  --bg-color: #1B1B1F;
+  --primary-color: #6E7E8F;
+  --fg-color: #2A3242;
+  --secondary-color: #848E98;
+  --text-color: #F1F2F3;
+}
+
 html, body {
   position: relative;
   height: 100%;
   width: 100%;
-  background-color: #BBA896;
+  background-color: var(--secondary-color);
   font-family: 'Roboto Mono', monospace;
   font-size: 1rem;
   color: #F1F2F0;
@@ -83,11 +99,16 @@ html, body {
 }
 
 .i-history {
-  content: url("./icons/history_white_24dp.svg");
+  content: url("./icons/empty-folder-svgrepo-com.svg");
+  fill: #fff !important;
 }
 
 .i-backspace {
   content: url("./icons/backspace_white_24dp.svg");
+}
+
+.i-chevronDown {
+  content: url("./icons/chevron-down-svgrepo-com.svg");
 }
 
 .i-menu {
@@ -98,12 +119,14 @@ html, body {
   content: url("./icons/menu_open_white_24dp.svg");
 }
 
-.i-day {
+.i-light {
   content: url("./icons/wb_sunny_white_24dp.svg");
 }
 
-.i-night {
+.i-dark {
   content: url("./icons/nightlight_white_24dp.svg");
+  -webkit-transform: rotateZ(-155deg);
+          transform: rotateZ(-155deg);
 }
 
 #app {
@@ -112,8 +135,9 @@ html, body {
   margin: auto;
   padding: 15px;
   border: 8px solid #2c303d;
+  border-color: rgba(var(--bg-color), 0.95);
   border-radius: 20px;
-  background-color: #373C4C;
+  background-color: var(--bg-color);
   -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
           box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   overflow: hidden;
@@ -140,17 +164,40 @@ nav p {
   text-align: center;
 }
 
+nav #theme-btn {
+  cursor: pointer;
+  opacity: 0.7;
+  -webkit-transition: opacity 0.1s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
+}
+
+nav #theme-btn:hover {
+  opacity: 1;
+}
+
 #history-toggle {
   position: absolute;
-  bottom: -10px;
+  bottom: -20px;
   left: 50%;
-  height: 20px;
-  width: 25px;
-  background-color: #81848F;
-  opacity: 0.3;
+  height: 40px;
+  width: 40px;
+  opacity: 0.5;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   cursor: pointer;
+  -webkit-transition: -webkit-transform 0.4s ease-in-out;
+  transition: -webkit-transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+}
+
+#history-toggle:hover {
+  opacity: 1;
+}
+
+.history-toggle--show {
+  -webkit-transform: translateX(-50%) rotateZ(180deg) !important;
+          transform: translateX(-50%) rotateZ(180deg) !important;
 }
 
 .history-panel {
@@ -158,6 +205,9 @@ nav p {
   width: 100%;
   border-radius: 5px;
   background-color: #42485b;
+  background-color: var(--bg-color);
+  -webkit-filter: brightness(1.05%);
+          filter: brightness(1.05%);
   -webkit-transition: height 1s ease-in-out;
   transition: height 1s ease-in-out;
   overflow: hidden;
@@ -200,12 +250,12 @@ nav p {
 
 #history-panel::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-  background-color: #373C4C;
+  background-color: var(--bg-color);
 }
 
 #history-panel::-webkit-scrollbar {
   width: 5px;
-  background-color: #373C4C;
+  background-color: var(--bg-color);
 }
 
 #history-panel::-webkit-scrollbar-thumb {
