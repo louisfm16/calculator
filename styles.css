@@ -54,10 +54,10 @@ html, body {
   position: relative;
   height: 100%;
   width: 100%;
-  background-color: #0EABA3;
+  background-color: #4b6584;
   font-family: 'Roboto Mono', monospace;
   font-size: 1rem;
-  color: #f2f2f2;
+  color: #fff;
 }
 
 .abs-cntr {
@@ -118,9 +118,9 @@ html, body {
   width: 400px;
   margin: auto;
   padding: 15px;
-  border: 8px solid #59bbb5;
+  border: 8px solid #85a3b6;
   border-radius: 20px;
-  background-color: #6BC2BD;
+  background-color: #95afc0;
   -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
           box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   overflow: hidden;
@@ -187,9 +187,10 @@ nav #theme-btn:hover {
   height: 0%;
   width: 100%;
   border-radius: 5px;
-  background-color: #7dc9c5;
+  background-color: #a5bbca;
   -webkit-transition: height 1s ease-in-out;
   transition: height 1s ease-in-out;
+  text-shadow: 0px 1px 1px rgba(50, 50, 50, 0.9);
   overflow: hidden;
   overflow-y: scroll;
 }
@@ -207,7 +208,7 @@ nav #theme-btn:hover {
   position: absolute;
   top: 10px;
   left: 15px;
-  color: #8c8c8c;
+  color: #999999;
   font-size: 0.8em;
 }
 
@@ -215,13 +216,13 @@ nav #theme-btn:hover {
   text-align: right;
   font-size: 1.7em;
   margin-bottom: 15px;
-  color: #d9d9d9;
+  color: #e6e6e6;
 }
 
 .history-panel--item .equation {
   text-align: right;
   font-size: 1em;
-  color: #bfbfbf;
+  color: #cccccc;
 }
 
 .history-panel--show {
@@ -230,16 +231,16 @@ nav #theme-btn:hover {
 
 #history-panel::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-  background-color: #6BC2BD;
+  background-color: #95afc0;
 }
 
 #history-panel::-webkit-scrollbar {
   width: 5px;
-  background-color: #6BC2BD;
+  background-color: #95afc0;
 }
 
 #history-panel::-webkit-scrollbar-thumb {
-  background-color: #679289;
+  background-color: #535c68;
   opacity: 0.2;
 }
 
@@ -253,8 +254,8 @@ nav #theme-btn:hover {
   margin: 15px 0;
   background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(0.2) rotate(180)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(4, 90%, 58%, 0)'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='hsla(0, 0%, 0%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-140,-15)' fill='url(%23a)'/></svg>");
   text-shadow: inset -1px 2px 1px rgba(0, 0, 0, 0.1), -1px 2px 1px rgba(0, 0, 0, 0.1);
-  background-color: #3B3B3B;
-  color: rgba(217, 217, 217, 0.7);
+  background-color: #778ca3;
+  color: rgba(230, 230, 230, 0.7);
 }
 
 #display .abs-cntr {
@@ -268,6 +269,7 @@ nav #theme-btn:hover {
 
 #display--eval {
   font-size: 4em;
+  font-size: 12.5vw;
   overflow: none;
 }
 
@@ -287,7 +289,7 @@ nav #theme-btn:hover {
   left: 0;
   bottom: 0;
   right: 0;
-  background: rgba(18, 16, 16, 0.1);
+  background: rgba(75, 70, 70, 0.1);
   opacity: 0;
   z-index: 2;
   pointer-events: none;
@@ -453,10 +455,10 @@ nav #theme-btn:hover {
 
 .btn {
   text-align: center;
-  background-color: #134f4c;
+  background-color: #5d728a;
   cursor: pointer;
   font-size: 1.6em;
-  border: 8px solid #0e3a38;
+  border: 8px solid #53667b;
   border-radius: 2px;
   -webkit-transition: all ease-in-out 0.1s;
   transition: all ease-in-out 0.1s;
@@ -502,8 +504,8 @@ nav #theme-btn:hover {
   height: 100%;
   width: 40%;
   margin-left: 10%;
-  background-color: #679289;
-  border: 7px solid #5c837b;
+  background-color: #535c68;
+  border: 7px solid #484f5a;
   font-size: 1.2em;
 }
 
@@ -513,7 +515,7 @@ nav #theme-btn:hover {
   height: 60%;
   display: -ms-grid;
   display: grid;
-  background-color: #7dc9c5;
+  background-color: #a5bbca;
   -ms-grid-columns: 1fr 1fr 1fr 1fr;
       grid-template-columns: 1fr 1fr 1fr 1fr;
   -ms-grid-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -528,8 +530,8 @@ nav #theme-btn:hover {
 }
 
 #calulator-btns #clear {
-  background-color: #0EABA3;
-  border-color: #0a7c76;
+  background-color: #4b6584;
+  border-color: #394c63;
 }
 
 #calulator-btns #clear:active {
@@ -538,13 +540,13 @@ nav #theme-btn:hover {
 }
 
 #calulator-btns #equal {
-  background-color: #0EABA3;
-  border-color: #0a7c76;
+  background-color: #4b6584;
+  border-color: #394c63;
 }
 
 #calulator-btns .btn--number {
-  background-color: #679289;
-  border-color: #5c837b;
+  background-color: #535c68;
+  border-color: #484f5a;
 }
 
 html[data-theme="dark"] {
@@ -587,6 +589,11 @@ html[data-theme="dark"] #history-panel::-webkit-scrollbar-thumb {
 
 html[data-theme="dark"] #display {
   color: rgba(216, 218, 213, 0.7);
+  background-color: #3B3B3B;
+}
+
+html[data-theme="dark"] #display::after {
+  background: rgba(18, 16, 16, 0.1);
 }
 
 html[data-theme="dark"] .btn {

@@ -195,6 +195,7 @@ export let CalcApp = (function () {
     this.UpdateDisplay(newCurrUserVal);
   }
 
+  // ! WIP
   calculator.BackspaceOperator = function() {
     console.log(this.getCalcs())
   }
@@ -208,8 +209,9 @@ export let CalcApp = (function () {
     * Setting the history to its backup localStorage fixes the overwriting issue (ironically by overwriting it)
     * No clue why this is happening
     */
-    // history = JSON.parse(window.localStorage.getItem('history'));
-    this.setHistory(JSON.parse(window.localStorage.getItem('history')));
+    if (window.localStorage.getItem('history')) {
+      this.setHistory(JSON.parse(window.localStorage.getItem('history')));
+    }
 
     this.setHistory();
     this.saveHistory();

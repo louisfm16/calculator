@@ -1,12 +1,19 @@
 *,*:before,*:after{box-sizing:border-box}html,body,div,span,object,iframe,figure,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,code,em,img,small,strike,strong,sub,sup,tt,b,u,i,ol,ul,li,fieldset,form,label,table,caption,tbody,tfoot,thead,tr,th,td,main,canvas,embed,footer,header,nav,section,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}footer,header,nav,section,main{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:"";content:none}table{border-collapse:collapse;border-spacing:0}input{-webkit-appearance:none;border-radius:0}
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap');
 
-$display-color: #3B3B3B;
-$bg-color: #6BC2BD; // f4c095
-$primary-color: #1d7874; // 
-$fg-color: #679289; // 
-$secondary-color: #0EABA3; // 
-$text-color: #f2f2f2; // 
+// $display-color: #3B3B3B;
+// $bg-color: #d1ccc0; // 
+// $primary-color: #227093; // 
+// $fg-color: #84817a; // 
+// $secondary-color: #34ace0; // 
+// $text-color: #f2f2f2; // 
+
+$display-color: #778ca3;
+$bg-color: #95afc0; // 
+$primary-color: #778ca3; // 
+$fg-color: #535c68; // 
+$secondary-color: #4b6584; // 
+$text-color: #fff; // 
 
 $display-color--dark: #3B3B3B;
 $bg-color--dark: #2D3A42;
@@ -169,6 +176,7 @@ nav {
   border-radius: 5px;
   background-color: lighten($bg-color, 5%);
   transition: height 1s ease-in-out;
+  text-shadow: 0px 1px 1px rgba(#323232, 0.9);
   overflow: hidden;
 	overflow-y: scroll;
 
@@ -233,7 +241,7 @@ nav {
   margin: 15px 0; // was 20px 0 before
   background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='8' patternTransform='scale(0.2) rotate(180)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(4, 90%, 58%, 0)'/><path d='M-.02 22c8.373 0 11.938-4.695 16.32-9.662C20.785 7.258 25.728 2 35 2c9.272 0 14.215 5.258 18.7 10.338C58.082 17.305 61.647 22 70.02 22M-.02 14.002C8.353 14 11.918 9.306 16.3 4.339 20.785-.742 25.728-6 35-6 44.272-6 49.215-.742 53.7 4.339c4.382 4.967 7.947 9.661 16.32 9.664M70 6.004c-8.373-.001-11.918-4.698-16.3-9.665C49.215-8.742 44.272-14 35-14c-9.272 0-14.215 5.258-18.7 10.339C11.918 1.306 8.353 6-.02 6.002'  stroke-width='0.5' stroke='hsla(0, 0%, 0%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-140,-15)' fill='url(%23a)'/></svg>");
   text-shadow: inset -1px 2px 1px rgba(0,0,0,.1), -1px 2px 1px rgba(0,0,0,.1);
-
+  
   background-color: $display-color;
   color: rgba(darken($text-color, 10%), 0.7);
 
@@ -248,6 +256,7 @@ nav {
 
   &--eval {
     font-size: 4em;
+    font-size: 12.5vw;
     overflow: none;
   }
 
@@ -267,7 +276,7 @@ nav {
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(18, 16, 16, 0.1);
+    background: rgba(75, 70, 70, 0.1);
     opacity: 0;
     z-index: 2;
     pointer-events: none;
@@ -466,6 +475,11 @@ html[data-theme="dark"] {
 
   #display {
     color: rgba(darken($text-color--dark, 10%), 0.7);
+    background-color: $display-color--dark;
+
+    &::after {
+      background: rgba(18, 16, 16, 0.1);
+    }
   }
 
   .btn {
